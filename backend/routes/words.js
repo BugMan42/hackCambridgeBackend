@@ -1,12 +1,12 @@
 var express = require('express');
-var router = express.Router();
+var wordsRouter = express.Router();
 var word = require('mongoose').model('WordEN');
 var ObjectId = require('mongoose').Types.ObjectId;
 
 
 
 // get all words
-router.get('/', function(req, res, next){
+wordsRouter.get('/', function(req, res, next){
     word.find({}, function(err, data) {
         if(!err) {
             res.status(200).json(data);
@@ -18,7 +18,7 @@ router.get('/', function(req, res, next){
 });
 
 // get all words of a user
-router.get('/:id', function(req, res, next){
+wordsRouter.get('/:id', function(req, res, next){
     var wordId = req.params.id;
     word.find({user:new ObjectId(wordId)}, function(err, data) {
         if(!err) {
@@ -30,7 +30,7 @@ router.get('/:id', function(req, res, next){
     })
 });
 
-router.post('/', function(req, res, next) {
+wordsRouter.post('/', function(req, res, next) {
     var wordData = req.body;
     var newWord = new word(wordData);
     newWord.save(function(err, saved) {
@@ -43,25 +43,22 @@ router.post('/', function(req, res, next) {
 });
 
 
-router.delete('/:id', function(req, res, next) {
-    var wordId = req.params.id;
-    word.remove({_id: new ObjectId(wordId)}, function(err){
+wordsRouter.delete('/:id', function(req, res, next) {
+
+    word.remove({_id: new ObjectId(req.params.id)}, function(err){
         if(!err) {
-            res.status(200).end("Deleted");
-        }
-        else {
-            console.log(err);
+            res.status(200).end("Word deleted");
         }
     });
 
 });
 
-router.patch('/:id', function(req, res, next) {
+wordsRouter.patch('/:id', function(req, res, next) {
     var userId = req.params.id;
     var userData = req.body;
     word.update({_id: userId}, {$set: userData}, function(err) {
         if(!err) {
-            res.status(200).end("Updated");
+            res.status(200).end("Word updated");
         }
         else {
             console.log(err);
@@ -70,4 +67,4 @@ router.patch('/:id', function(req, res, next) {
 
 });
 
-module.exports = router; //When calling require('words'), we get the router.
+module.exports = wordsRouter; //When calling require('words'), we get the router.

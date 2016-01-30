@@ -15,6 +15,7 @@ router.get('/', function(req, res, next){
     word.find({}, function(err, data) {
         if(!err) {
             var randWord = data[Math.floor(Math.random() * data.length)].word;
+            console.log(randWord);
             var NUMBER_OF_WORDS = 50;
             var dataQuery = querystring.stringify({
                 word: randWord,

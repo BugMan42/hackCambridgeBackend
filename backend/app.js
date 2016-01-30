@@ -10,8 +10,9 @@ require('./models/index').initialize();
 
 mongoose.connect('mongodb://localhost/backend');
 
-app.use(bodyParser.json());
 app.use(cors());
+app.use(bodyParser.json());
+
 
 //app.use(expressWinston.logger(config.winston_options));
 

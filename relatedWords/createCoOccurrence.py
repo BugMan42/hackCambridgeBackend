@@ -3,89 +3,98 @@ import sys
 import codecs
 import gzip
 
-coOccurrenceMatrix = dict()
-overallFrequency = dict()
-tokenIds = dict()
-tokenNames = dict()
-tokenCounter = 0
-filesProcessed = 0
-wikipediaCorpusPath = "/media/sb/C7F2-F305/Wikipedia/corpus/"
-testWord = "abseiling"
+class WordRecommender:
+	def __init__(self):
+		self.coOccurrenceMatrix = dict()
+		self.overallFrequency = dict()
+		self.tokenIds = dict()
+		self.tokenNames = dict()
+		self.tokenCounter = 0
+		self.filesProcessed = 0
+		self.wikipediaCorpusPath = "/media/sb/C7F2-F305/Wikipedia/corpus/"
+		self.testWord = "abseiling"
+		self.halt = False
 
-halt = False
-
-for d in os.listdir(wikipediaCorpusPath):
-	if halt == True:
-		break
-	for f in os.listdir(wikipediaCorpusPath + d):
-
-		fileName = wikipediaCorpusPath + d + "/" + f
-
-		print fileName
-		if not fileName.endswith(".gz"):
-			continue
-		with gzip.open(fileName, 'rb') as f:
-			filesProcessed+=1
-			print str(filesProcessed) + " files processed."
-			if filesProcessed == 1000:
-				halt = True
+	def run(self):
+		for d in os.listdir(self.wikipediaCorpusPath):
+			if halt == True:
 				break
-			for l in f:
+			for f in os.listdir(self.wikipediaCorpusPath + d):
 
-				if l.startswith("<doc"):
-					docTokens = set()
+				fileName = self.wikipediaCorpusPath + d + "/" + f
 
-				elif l.startswith("</doc>"):
-
+				print fileName
+				if not fileName.endswith(".gz"):
 					continue
+				with gzip.open(fileName, 'rb') as f:
+					self.filesProcessed+=1
+					print str(self.filesProcessed) + " files processed."
+					if self.filesProcessed == 1000:
+						halt = True
+						break
+					for l in f:
 
-				else:
-					tokens = l.strip().split(" ")
-					for token in tokens:
-						if not token in tokenIds:
-							tokenNames[tokenCounter] = token
-							tokenIds[token] = tokenCounter
-							overallFrequency[tokenCounter] = 0
-							tokenCounter += 1
+						if l.startswith("<doc"):
+							docTokens = set()
 
-						tokenId = tokenIds[token]
-						overallFrequency[tokenId] += 1
-						docTokens.add(tokenId)
+						elif l.startswith("</doc>"):
 
-				for tokenId1 in docTokens:
-					if not tokenNames[tokenId1] == testWord:
-						continue
-					if not tokenId1 in coOccurrenceMatrix:
-						coOccurrenceMatrix[tokenId1] = dict()
-					for tokenId2 in docTokens:
-						if not tokenId2 in coOccurrenceMatrix[tokenId1]:
-							coOccurrenceMatrix[tokenId1][tokenId2] = 0
-			#			if not tokenId1 in coOccurrenceMatrix[tokenId2]:
-			#				coOccurrenceMatrix[tokenId2][tokenId1] = 0
-						coOccurrenceMatrix[tokenId1][tokenId2] += 1
-			#			coOccurrenceMatrix[tokenId2][tokenId1] += 1
+							continue
 
-	#print len(coOccurrenceMatrix)
+						else:
+							tokens = l.strip().split(" ")
+							for token in tokens:
+								if not token in self.tokenIds:
+									self.tokenNames[self.tokenCounter] = token
+									self.tokenIds[token] = self.tokenCounter
+									self.overallFrequency[self.tokenCounter] = 0
+									self.tokenCounter += 1
 
-#print overallFrequency
+								tokenId = self.tokenIds[token]
+								self.overallFrequency[tokenId] += 1
+								docTokens.add(tokenId)
 
-tokenIdTest = tokenIds[testWord]
-ranks = dict()
-for tokenIdRec in coOccurrenceMatrix[tokenIdTest]:
-	if overallFrequency[tokenIdRec] < 1000:
-		continue
-	if len(tokenNames[tokenIdRec]) == 0 or str(tokenNames[tokenIdRec][0]).isupper():
-		continue
-	ranks[tokenNames[tokenIdRec]] = coOccurrenceMatrix[tokenIdTest][tokenIdRec] / float(overallFrequency[tokenIdRec])
+						for tokenId1 in docTokens:
+							if not self.tokenNames[tokenId1] == self.testWord:
+								continue
+							if not tokenId1 in self.coOccurrenceMatrix:
+								self.coOccurrenceMatrix[tokenId1] = dict()
+							for tokenId2 in docTokens:
+								if not tokenId2 in self.coOccurrenceMatrix[tokenId1]:
+									self.coOccurrenceMatrix[tokenId1][tokenId2] = 0
+					#			if not tokenId1 in coOccurrenceMatrix[tokenId2]:
+					#				coOccurrenceMatrix[tokenId2][tokenId1] = 0
+								self.coOccurrenceMatrix[tokenId1][tokenId2] += 1
+					#			coOccurrenceMatrix[tokenId2][tokenId1] += 1
 
-maxNum = 100
-numCnt = 0
+			#print len(coOccurrenceMatrix)
 
-for w in sorted(ranks, key=ranks.get, reverse=True):
-	print w, ranks[w]
-	numCnt +=1
-	if maxNum == numCnt:
-		break
+		#print overallFrequency
 
-print "Done."
+		tokenIdTest = self.tokenIds[self.testWord]
+		ranks = dict()
+		for tokenIdRec in self.coOccurrenceMatrix[tokenIdTest]:
+			if self.overallFrequency[tokenIdRec] < 1000:
+				continue
+			if len(self.tokenNames[tokenIdRec]) == 0 or str(self.tokenNames[tokenIdRec][0]).isupper():
+				continue
+			ranks[self.tokenNames[tokenIdRec]] = self.coOccurrenceMatrix[tokenIdTest][tokenIdRec] / float(self.overallFrequency[tokenIdRec])
+
+		maxNum = 100
+		numCnt = 0
+
+		for w in sorted(ranks, key=ranks.get, reverse=True):
+			print w, ranks[w]
+			numCnt +=1
+			if maxNum == numCnt:
+				break
+
+		print "Done."
+		
+def main():
+	obj = WordRecommender()
+	obj.run()
+
+if __name__ == '__main__':
+    main()
 

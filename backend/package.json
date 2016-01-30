@@ -14,5 +14,8 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/BugMan42/hackCambridgeBackend/issues"
+  },
+  "dependencies": {
+    "express": "^4.13.4"
   }
 }

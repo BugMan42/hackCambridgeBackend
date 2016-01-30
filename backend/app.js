@@ -21,9 +21,15 @@ var userRouter = require('./routes/users');
 
 app.use('/users' ,userRouter);
 
+var relatedRouter = require('./routes/related');
+
+app.use('/related' ,relatedRouter);
+
 var authenticationRouter = require('./routes/authentication');
 
 app.use('/authentication', authenticationRouter);
+
+
 
 http.createServer(app).listen(8080, function(){
     console.log('Listening on port 8080');

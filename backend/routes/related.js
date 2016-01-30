@@ -36,7 +36,14 @@ router.get('/', function(req, res, next){
                 response.setEncoding('utf8');
                 response.on('data', function (chunk) {
                     console.log(chunk);
-                    res.status(200).end(chunk);
+                    var words = [];
+                    for (word in chunk) {
+                        words.push({
+                            'word':word,
+                            'definition':''
+                        })
+                    }
+                    res.status(200).end(words);
                 });
 
             });

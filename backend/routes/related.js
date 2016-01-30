@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var word = require('mongoose').model('WordEN');
 var http = require('http');
+var querystring = require('querystring');
 
 String.prototype.format = function () {
     var i = 0, args = arguments;
@@ -13,19 +14,34 @@ String.prototype.format = function () {
 router.get('/', function(req, res, next){
     word.find({}, function(err, data) {
         if(!err) {
+            var randWord = data[Math.floor(Math.random() * data.length)].word;
+            var NUMBER_OF_WORDS = 50;
+            var data = querystring.stringify({
+                word: randWord,
+                nRecom: NUMBER_OF_WORDS
+            });
             var options = {
-                host: 'http://172.20.1.43',
+                host: '172.20.1.43',
                 path: '/',
                 port: '5000',
-                method: 'POST'
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Length': Buffer.byteLength(data)
+                }
             };
-            var NUMBER_OF_WORDS = 50;
-            var req = http.request(options, function(response) {
-                res.status(200).end(response);
+            var post_req = http.request(options, function(response, error) {
+                if (error) console.log(error);
+                response.setEncoding('utf8');
+                response.on('data', function (chunk) {
+                    console.log(chunk);
+                    res.status(200).end(chunk);
+                });
+
             });
-            var randWord = data[Math.floor(Math.random() * data.length)];
-            req.write("word={}&nRecom={}".format(randWord, NUMBER_OF_WORDS));
-            req.end();
+            post_req.write(data);
+            post_req.end();
+
         }
         else {
             res.status(404).end("Not Found");

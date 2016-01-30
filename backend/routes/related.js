@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var word = require('mongoose').model('WordEN');
+var http = require('http');
 
 String.prototype.format = function () {
     var i = 0, args = arguments;
@@ -12,13 +13,19 @@ String.prototype.format = function () {
 router.get('/', function(req, res, next){
     word.find({}, function(err, data) {
         if(!err) {
-            var randWord = data[Math.floor(Math.random() * data.length)];
-            var xmlHttp = new XMLHttpRequest();
+            var options = {
+                host: 'http://172.20.1.43',
+                path: '/',
+                port: '5000',
+                method: 'POST'
+            };
             var NUMBER_OF_WORDS = 50;
-            xmlHttp.open("POST", "http://172.20.1.43:5000", false);
-            xmlHttp.send("fname={}&lname={}".format(randWord, NUMBER_OF_WORDS));
-            var response =  xmlHttp.responseText;
-            res.status(200).end(response);
+            var req = http.request(options, function(response) {
+                res.status(200).end(response);
+            });
+            var randWord = data[Math.floor(Math.random() * data.length)];
+            req.write("fname={}&lname={}".format(randWord, NUMBER_OF_WORDS));
+            req.end();
         }
         else {
             res.status(404).end("Not Found");

@@ -1,5 +1,5 @@
 
-var models = ['./task.model'];
+var models = ['./user.wordsEN','user.reconWords'];
 
 /**
  * Function to initialize all the models, based on an Array.

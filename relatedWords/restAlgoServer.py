@@ -8,7 +8,7 @@ def index():
 	word = request.form['word']
 	nRecom = request.form['nrecom']
 	obj = WordRecommender()
-	obj.run()
+	print obj.run()
 
 if __name__ == '__main__':
 	app.run(debug=True)

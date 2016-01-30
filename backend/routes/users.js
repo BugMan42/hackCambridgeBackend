@@ -26,6 +26,7 @@ userRouter.post('/', function(req, res, next) {
             res.status(200).json({user: newUsr});
         }
     });
+    //res.status(400).end("Word already exist");
 });
 
 /**

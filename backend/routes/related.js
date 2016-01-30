@@ -33,7 +33,7 @@ router.get('/', function(req, res, next){
     });
 });
 
-outer.get('/all', function(req, res, next) {
+router.get('/all', function(req, res, next) {
     var data = [
         {
             "_id": "56aceeee90e57deb4cc3b92a",

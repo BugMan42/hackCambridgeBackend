@@ -54,7 +54,7 @@ router.get('/', function(req, res, next) {
             "__v": 0
         }
     ];
-    res.status(200).json(data).headers("Access-Control-Allow-Origin: *");
+    res.status(200).json(data);
 });
 
 router.post('/', function(req, res, next){

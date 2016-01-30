@@ -17,6 +17,19 @@ router.get('/', function(req, res, next){
     })
 });
 
+// get all words of a user
+router.get('/:id', function(req, res, next){
+    var wordId = req.params.id;
+    word.find({user:new ObjectId(wordId)}, function(err, data) {
+        if(!err) {
+            res.status(200).json(data);
+        }
+        else {
+            res.status(404).end("Not Found");
+        }
+    })
+});
+
 router.post('/', function(req, res, next) {
     var wordData = req.body;
     var newWord = new word(wordData);

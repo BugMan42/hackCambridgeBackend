@@ -1,5 +1,5 @@
 
-var models = ['./user.wordsEN','user.reconWords'];
+var models = ['./user.wordsEN','./user'];
 
 /**
  * Function to initialize all the models, based on an Array.

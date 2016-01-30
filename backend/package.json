@@ -16,12 +16,14 @@
     "url": "https://github.com/BugMan42/hackCambridgeBackend/issues"
   },
   "dependencies": {
+    "bcrypt": "^0.8.5",
     "body-parser": "^1.14.2",
     "cors": "^2.7.1",
     "express": "^4.13.4",
     "express-jwt": "^3.3.0",
     "express-winston": "^1.2.0",
     "fs": "0.0.2",
+    "jsonwebtoken": "^5.5.4",
     "lodash": "^4.1.0",
     "mongoose": "^4.3.7"
   }

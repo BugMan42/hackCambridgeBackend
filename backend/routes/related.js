@@ -16,7 +16,7 @@ router.get('/', function(req, res, next){
         if(!err) {
             var randWord = data[Math.floor(Math.random() * data.length)].word;
             var NUMBER_OF_WORDS = 50;
-            var data = querystring.stringify({
+            var dataQuery = querystring.stringify({
                 word: randWord,
                 nRecom: NUMBER_OF_WORDS
             });
@@ -27,7 +27,7 @@ router.get('/', function(req, res, next){
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'Content-Length': Buffer.byteLength(data)
+                    'Content-Length': Buffer.byteLength(dataQuery)
                 }
             };
             var post_req = http.request(options, function(response, error) {
@@ -39,7 +39,7 @@ router.get('/', function(req, res, next){
                 });
 
             });
-            post_req.write(data);
+            post_req.write(dataQuery);
             post_req.end();
 
         }

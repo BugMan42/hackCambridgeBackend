@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-// get all related
+// get all related words
 router.get('/', function(req, res, next){
     /*word.find({}, function(err, data) {
         if(!err) {
@@ -12,4 +12,4 @@ router.get('/', function(req, res, next){
 
 
 
-module.exports = router; //When calling require('words'), we get the router.
+module.exports = router;

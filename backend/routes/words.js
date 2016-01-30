@@ -11,6 +11,9 @@ router.get('/', function(req, res, next){
         if(!err) {
             res.status(200).json(data);
         }
+        else {
+            res.status(404).end("Not Found");
+        }
     })
 });
 
@@ -31,25 +34,27 @@ router.delete('/:id', function(req, res, next) {
     var wordId = req.params.id;
     word.remove({_id: new ObjectId(wordId)}, function(err){
         if(!err) {
-            res.status(200).end();
+            res.status(200).end("Deleted");
+        }
+        else {
+            console.log(err);
         }
     });
 
-    //alternative:
-    //word.findOneAndRemove();
 });
-/*
+
 router.patch('/:id', function(req, res, next) {
     var userId = req.params.id;
     var userData = req.body;
     word.update({_id: userId}, {$set: userData}, function(err) {
         if(!err) {
-            res.status(200).end();
+            res.status(200).end("Updated");
+        }
+        else {
+            console.log(err);
         }
     });
 
-    //alternative:
-    //word.findOneAndUpdate();
-});*/
+});
 
 module.exports = router; //When calling require('words'), we get the router.

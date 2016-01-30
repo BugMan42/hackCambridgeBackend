@@ -7,7 +7,7 @@ var express_jwt = require('express-jwt');
  * Function to retrieve all the users in the database.
  * Restricted only to admin users.
  */
-userRouter.get('/', express_jwt({secret: jwt_secret}), function(req, res, next) {
+userRouter.get('/all', express_jwt({secret: jwt_secret}), function(req, res, next) {
     if(req.user.is_admin) {
         User.find({}, function(err, users) {
             if(err) throw err;
@@ -18,6 +18,16 @@ userRouter.get('/', express_jwt({secret: jwt_secret}), function(req, res, next) 
     } else{
         res.status(403).send('You don\'t have access to this resource');
     }
+});
+
+// Function to retrieve all the users without permissions
+userRouter.get('/', express_jwt({secret: jwt_secret}), function(req, res, next) {
+    User.find({}, function(err, users) {
+        if(err) throw err;
+        else {
+            res.status(200).send(users);
+        }
+    });
 });
 
 /**

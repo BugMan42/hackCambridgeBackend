@@ -2,13 +2,12 @@ var express = require('express');
 var mongoose = require('mongoose');
 var fs = require('fs');
 var http = require('http');
-var config = require('./config');
 var bodyParser = require('body-parser');
 
 var app = express();
 require('./models/index').initialize();
 
-mongoose.connect(config.db_path);
+mongoose.connect('mongodb://localhost/backend');
 
 app.use(bodyParser.json());
 
@@ -17,6 +16,14 @@ app.use(bodyParser.json());
 var wordRouter = require('./routes/words');
 
 app.use('/words' ,wordRouter);
+
+var userRouter = require('./routes/users');
+
+app.use('/users' ,userRouter);
+
+var authenticationRouter = require('./routes/authentication');
+
+app.use('/authentication', authenticationRouter);
 
 http.createServer(app).listen(8080, function(){
     console.log('Listening on port 8080');

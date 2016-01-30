@@ -11,6 +11,12 @@ mongoose.connect('mongodb://localhost/backend');
 
 app.use(bodyParser.json());
 
+//app.use(expressWinston.logger(config.winston_options));
+
+var wordRouter = require('./routes/words');
+
+app.use('/words' ,wordRouter);
+
 http.createServer(app).listen(8080, function(){
     console.log('Listening on port 8080');
 });

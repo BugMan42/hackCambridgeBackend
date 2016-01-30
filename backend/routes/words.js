@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var word = require('mongoose').model('word');
+var word = require('mongoose').model('WordEN');
 var ObjectId = require('mongoose').Types.ObjectId;
 
 
@@ -25,7 +25,7 @@ router.post('/', function(req, res, next) {
         }
     })
 });
-/*
+
 
 router.delete('/:id', function(req, res, next) {
     var wordId = req.params.id;
@@ -38,7 +38,7 @@ router.delete('/:id', function(req, res, next) {
     //alternative:
     //word.findOneAndRemove();
 });
-
+/*
 router.patch('/:id', function(req, res, next) {
     var userId = req.params.id;
     var userData = req.body;

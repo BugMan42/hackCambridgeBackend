@@ -15,9 +15,8 @@ userRouter.get('/',  function(req, res, next) {
     });
 });
 
-/**
- * Function to create new user (register)
- */
+
+// Function to create new user (register)
 userRouter.post('/', function(req, res, next) {
     var userDb = new User(req.body);
     userDb.save(function(err, newUsr) {
@@ -26,7 +25,7 @@ userRouter.post('/', function(req, res, next) {
             res.status(200).json({user: newUsr});
         }
     });
-    //res.status(400).end("Word already exist");
+    // res.status(400).end("User already exist");
 });
 
 /**

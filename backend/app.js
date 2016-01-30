@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var fs = require('fs');
 var http = require('http');
 var bodyParser = require('body-parser');
+var cors = require('cors');
 
 var app = express();
 require('./models/index').initialize();
@@ -10,6 +11,7 @@ require('./models/index').initialize();
 mongoose.connect('mongodb://localhost/backend');
 
 app.use(bodyParser.json());
+app.use(cors());
 
 //app.use(expressWinston.logger(config.winston_options));
 

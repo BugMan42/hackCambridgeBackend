@@ -24,7 +24,7 @@ router.get('/', function(req, res, next){
                 res.status(200).end(response);
             });
             var randWord = data[Math.floor(Math.random() * data.length)];
-            req.write("fname={}&lname={}".format(randWord, NUMBER_OF_WORDS));
+            req.write("word={}&nRecom={}".format(randWord, NUMBER_OF_WORDS));
             req.end();
         }
         else {

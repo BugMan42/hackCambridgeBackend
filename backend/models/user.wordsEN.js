@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
-var obj = Schema.Types.ObjectId;
 var Schema = mongoose.Schema;
+var obj = Schema.Types.ObjectId;
 
 module.exports = function() {
     var wordsENSchema = new Schema({

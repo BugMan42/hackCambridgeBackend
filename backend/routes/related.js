@@ -61,10 +61,11 @@ router.post('/multipleWords', function(req, res, next){
     word.find({}, function(err, data) {
         if(!err) {
             var randWords = req.body;
+            console.log(randWords.length);
             console.log("MULTIPLE WORDS " + randWords);
             var dataQuery = JSON.stringify({
                 words: randWords,
-                nWords: 10
+                nWords: (randWords.length * 0.1)
             });
             //console.log(dataQuery);
             var options = {

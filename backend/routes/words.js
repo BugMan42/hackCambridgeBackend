@@ -5,7 +5,12 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var querystring = require('querystring');
 var http = require('http');
 
-
+String.prototype.format = function () {
+    var i = 0, args = arguments;
+    return this.replace(/{}/g, function () {
+        return typeof args[i] != 'undefined' ? args[i++] : '';
+    });
+};
 
 // get all words
 wordsRouter.get('/', function(req, res, next){
@@ -30,6 +35,37 @@ wordsRouter.get('/:id', function(req, res, next){
             res.status(404).end("Not Found");
         }
     })
+});
+
+wordsRouter.post('/translation', function(req, res, next) {
+    var sourceLang = 'en';
+    var destLang = req.body.destLang;
+    var word = req.body.word;
+    var key = "trnsl.1.1.20160130T213138Z.61f3d3183a7aea66.576cd55ad6fca5eebf5c5cb9a97c8249f897f142";
+    var host = 'https://translate.yandex.net';
+    var reqUrl = '/api/v1.5/tr.json/translate?key={}&text={}&lang={}-{}'.format(key, word, sourceLang, destLang);
+    var options = {
+        host: host,
+        path: reqUrl,
+        method: 'GET'
+    };
+    var get_req = http.request(options, function(response, error) {
+        if (error) {
+            console.log(error);
+            res.status(400).end("NOPE");
+        }
+        else {
+            response.setEncoding('utf8');
+            response.on('data', function (chunk) {
+                console.log(chunk);
+                res.status(200).end(chunk);
+            });
+        }
+
+    });
+    get_req.write(dataQuery);
+    get_req.end();
+
 });
 
 wordsRouter.post('/', function(req, res, next) {

@@ -40,7 +40,7 @@ router.get('/', function(req, res, next){
                     var words = [];
                     for (var i = 0; i < jsonChunk.length; ++i) {
                         words.push({
-                            'word':jsonChunk[word],
+                            'word':jsonChunk[i],
                             'definition':''
                         })
                     }

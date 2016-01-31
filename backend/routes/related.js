@@ -65,7 +65,7 @@ router.post('/multipleWords', function(req, res, next){
             console.log("MULTIPLE WORDS " + randWords);
             var dataQuery = JSON.stringify({
                 words: randWords,
-                nWords: (randWords.length * 0.1)
+                nWords: Math.ceil(randWords.length * 0.1)
             });
             //console.log(dataQuery);
             var options = {

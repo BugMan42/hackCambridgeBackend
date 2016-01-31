@@ -47,27 +47,29 @@ wordsRouter.post('/', function(req, res, next) {
 wordsRouter.post('/discardedWords', function(req, res, next) {
     var discardedWords = req.body;
     console.log("DISCARDED " + discardedWords);
-    var dataQuery = querystring.stringify({
-        words: discardedWords
-    });
-    console.log(dataQuery);
+    var dataQuery = JSON.stringify(discardedWords);
     var options = {
         host: '172.20.1.43',
         path: '/discardedWords',
         port: '5000',
         method: 'POST',
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/json',
             'Content-Length': Buffer.byteLength(dataQuery)
         }
     };
     var post_req = http.request(options, function(response, error) {
-        if (error) console.log(error);
-        response.setEncoding('utf8');
-        response.on('data', function (chunk) {
-            console.log(chunk);
-            res.status(200).end("discardedWords Done");
-        });
+        if (error) {
+            console.log(error);
+            res.status(400).end("NOPE");
+        }
+        else {
+            response.setEncoding('utf8');
+            response.on('data', function (chunk) {
+                console.log(chunk);
+                res.status(200).end("discardedWords Done");
+            });
+        }
 
     });
     post_req.write(dataQuery);
@@ -77,16 +79,14 @@ wordsRouter.post('/discardedWords', function(req, res, next) {
 wordsRouter.post('/acceptedWords', function(req, res, next) {
     var acceptedWords = req.body;
     console.log("ACCEPTED " + acceptedWords);
-    var dataQuery = querystring.stringify({
-        words: acceptedWords
-    });
+    var dataQuery = JSON.stringify(acceptedWords);
     var options = {
         host: '172.20.1.43',
         path: '/acceptedWords',
         port: '5000',
         method: 'POST',
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/json',
             'Content-Length': Buffer.byteLength(dataQuery)
         }
     };

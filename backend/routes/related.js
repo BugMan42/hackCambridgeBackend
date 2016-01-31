@@ -44,7 +44,7 @@ router.get('/', function(req, res, next){
                             'definition':''
                         })
                     }
-                    res.status(200).end(words);
+                    res.status(200).json(words);
                 });
 
             });

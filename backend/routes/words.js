@@ -46,11 +46,9 @@ wordsRouter.post('/', function(req, res, next) {
 
 wordsRouter.post('/discardedWords', function(req, res, next) {
     var discardedWords = req.body;
-    console.log(discardedWords);
-    //var NUMBER_OF_WORDS = discartedWords.length;
+    console.log("DISCARDED "+discardedWords);
     var dataQuery = querystring.stringify({
-        words: discardedWords,
-        nWords: 1
+        words: discardedWords
     });
     var options = {
         host: '172.20.1.43',
@@ -77,11 +75,9 @@ wordsRouter.post('/discardedWords', function(req, res, next) {
 
 wordsRouter.post('/acceptedWords', function(req, res, next) {
     var acceptedWords = req.body;
-    console.log(acceptedWords);
-    //var NUMBER_OF_WORDS = discartedWords.length;
+    console.log("ACCEPTED " + acceptedWords);
     var dataQuery = querystring.stringify({
-        words: acceptedWords,
-        nWords: 1
+        words: acceptedWords
     });
     var options = {
         host: '172.20.1.43',

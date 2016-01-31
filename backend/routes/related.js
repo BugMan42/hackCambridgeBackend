@@ -58,6 +58,96 @@ router.get('/', function(req, res, next){
     });
 });
 
+router.get('/singleWord', function(req, res, next){
+    word.find({}, function(err, data) {
+        if(!err) {
+            var randWords = req.body;
+            console.log("SINGLE "+randWords);
+            var dataQuery = querystring.stringify({
+                word: randWords
+            });
+            var options = {
+                host: '172.20.1.43',
+                path: '/relatedWords',
+                port: '5000',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Length': Buffer.byteLength(dataQuery)
+                }
+            };
+            var post_req = http.request(options, function(response, error) {
+                if (error) console.log(error);
+                response.setEncoding('utf8');
+                response.on('data', function (chunk) {
+                    console.log(chunk);
+                    var jsonChunk = JSON.parse(chunk);
+                    var words = [];
+                    for (var i = 0; i < jsonChunk.length; ++i) {
+                        words.push({
+                            'word':jsonChunk[i],
+                            'definition':''
+                        })
+                    }
+                    res.status(200).json(words);
+                });
+
+            });
+            post_req.write(dataQuery);
+            post_req.end();
+
+        }
+        else {
+            res.status(404).end("Not Found");
+        }
+    });
+});
+
+router.get('/multipleWords', function(req, res, next){
+    word.find({}, function(err, data) {
+        if(!err) {
+            var randwords = req.body;
+            console.log("SINGLE WORD "+randWords);
+            var dataQuery = querystring.stringify({
+                words: randwords
+            });
+            var options = {
+                host: '172.20.1.43',
+                path: '/relatedWords/multiple',
+                port: '5000',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Length': Buffer.byteLength(dataQuery)
+                }
+            };
+            var post_req = http.request(options, function(response, error) {
+                if (error) console.log(error);
+                response.setEncoding('utf8');
+                response.on('data', function (chunk) {
+                    console.log(chunk);
+                    var jsonChunk = JSON.parse(chunk);
+                    var words = [];
+                    for (var i = 0; i < jsonChunk.length; ++i) {
+                        words.push({
+                            'word':jsonChunk[i],
+                            'definition':''
+                        })
+                    }
+                    res.status(200).json(words);
+                });
+
+            });
+            post_req.write(dataQuery);
+            post_req.end();
+
+        }
+        else {
+            res.status(404).end("Not Found");
+        }
+    });
+});
+
 router.get('/all', function(req, res, next) {
     var data = [
         {

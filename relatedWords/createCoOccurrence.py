@@ -39,7 +39,7 @@ class WordRecommender:
 				with gzip.open(fileName, 'rb') as f:
 					self.filesProcessed+=1
 
-					if self.filesProcessed == 2:
+					if self.filesProcessed == 20:
 						self.halt = True
 						break
 
@@ -259,6 +259,8 @@ class WordRecommender:
 		newWords = list()
 		weights = list()
 		weightSum = 0.0
+		# prevent nWords > len(words)
+		nWords = min(nWords, len(words))
 		for word in words:
 			if not word in self.tokenIds:
 				continue
@@ -266,11 +268,12 @@ class WordRecommender:
 			newWords.append(tokenId)
 			#print self.difficultyScores
 			#print self.overallFrequency
-			weight = abs(self.difficultyScores[tokenId] - self.userDifficultyScore) / self.overallFrequency[tokenId]
+			weight = 1.0 / (1.0 + abs(self.difficultyScores[tokenId] - self.userDifficultyScore)) / self.overallFrequency[tokenId]
 			weightSum += weight
 			weights.append(weight)
-		weights = [(v / float(weightSum)) for v in weights]
+		print "weightSum: ", weightSum
 		print weights
+		weights = [(v / float(weightSum)) for v in weights]
 		results = [self.tokenNames[tokenId] for tokenId in np.random.choice(newWords, size=nWords, replace=False, p=weights)]
 		print "Results: ", results
 		return results
@@ -292,7 +295,11 @@ def main():
 #		sample = random.sample(obj.tokenIds.keys(), 50)
 #		obj.updateAcceptedWords(sample)
 #		print "New user score: ", obj.userDifficultyScore
-	obj.run("football", 10)
+#	obj.run("football", 10)
+	obj.userDifficultyScore = 5.0
+	obj.filterListOfWords(['be', 'demilitarise', 'archbishop'], 3)
+	obj.userDifficultyScore = 1.0
+	obj.filterListOfWords(['be', 'demilitarise', 'archbishop'], 3)
 
 if __name__ == '__main__':
     main()

@@ -36,7 +36,7 @@ router.get('/', function(req, res, next){
                 response.setEncoding('utf8');
                 response.on('data', function (chunk) {
                     console.log(chunk);
-                    var jsonChunk = JSON.stringify(chunk);
+                    var jsonChunk = JSON.parse(chunk);
                     var words = [];
                     for (var i = 0; i < jsonChunk.length; ++i) {
                         words.push({

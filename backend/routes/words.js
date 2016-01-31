@@ -46,7 +46,7 @@ wordsRouter.post('/', function(req, res, next) {
 
 wordsRouter.post('/discardedWords', function(req, res, next) {
     var discardedWords = req.body;
-    console.log("DISCARDED "+discardedWords);
+    console.log("DISCARDED " + discardedWords);
     var dataQuery = querystring.stringify({
         words: discardedWords
     });
@@ -65,7 +65,7 @@ wordsRouter.post('/discardedWords', function(req, res, next) {
         response.setEncoding('utf8');
         response.on('data', function (chunk) {
             console.log(chunk);
-            res.status(200).end("nice");
+            res.status(200).end("discardedWords Done");
         });
 
     });
@@ -94,7 +94,7 @@ wordsRouter.post('/acceptedWords', function(req, res, next) {
         response.setEncoding('utf8');
         response.on('data', function (chunk) {
             console.log(chunk);
-            res.status(200).end("nice");
+            res.status(200).end("AcceptedWords Done");
         });
 
     });

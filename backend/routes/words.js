@@ -42,6 +42,36 @@ wordsRouter.post('/', function(req, res, next) {
     })
 });
 
+wordsRouter.post('/discard', function(req, res, next) {
+    var discartedWords = req.params.discartedWords;
+    console.log(discartedWords);
+    var NUMBER_OF_WORDS = discartedWords.length;
+    var dataQuery = querystring.stringify({
+        words: discartedWords,
+        nWords: NUMBER_OF_WORDS
+    });
+    var options = {
+        host: '172.20.1.43',
+        path: '/discardedWords',
+        port: '5000',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Length': Buffer.byteLength(dataQuery)
+        }
+    };
+    var post_req = http.request(options, function(response, error) {
+        if (error) console.log(error);
+        response.setEncoding('utf8');
+        response.on('data', function (chunk) {
+            console.log(chunk);
+            res.status(200).end("nice");
+        });
+
+    });
+    post_req.write(dataQuery);
+    post_req.end();
+});
 
 wordsRouter.delete('/:id', function(req, res, next) {
 

@@ -23,7 +23,7 @@ router.get('/', function(req, res, next){
             });
             var options = {
                 host: '172.20.1.43',
-                path: '/',
+                path: '/relatedWords',
                 port: '5000',
                 method: 'POST',
                 headers: {

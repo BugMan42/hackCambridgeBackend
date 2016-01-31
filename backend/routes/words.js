@@ -4,6 +4,7 @@ var word = require('mongoose').model('WordEN');
 var ObjectId = require('mongoose').Types.ObjectId;
 var querystring = require('querystring');
 var http = require('http');
+var https = require('https');
 
 String.prototype.format = function () {
     var i = 0, args = arguments;
@@ -38,34 +39,34 @@ wordsRouter.get('/:id', function(req, res, next){
 });
 
 wordsRouter.post('/translation', function(req, res, next) {
-    var sourceLang = 'en';
-    var destLang = req.body.destLang;
-    var word = req.body.word;
-    var key = "trnsl.1.1.20160130T213138Z.61f3d3183a7aea66.576cd55ad6fca5eebf5c5cb9a97c8249f897f142";
-    var host = 'https://translate.yandex.net';
-    var reqUrl = '/api/v1.5/tr.json/translate?key={}&text={}&lang={}-{}'.format(key, word, sourceLang, destLang);
+    var destLang = 'en-' + req.body.destLang;
+    var dataQuery = querystring.stringify({
+        key: 'trnsl.1.1.20160130T213138Z.61f3d3183a7aea66.576cd55ad6fca5eebf5c5cb9a97c8249f897f142',
+        text: req.body.word,
+        lang: destLang
+    });
     var options = {
-        host: host,
-        path: reqUrl,
-        method: 'GET'
+        host: 'translate.yandex.net',
+        path:  '/api/v1.5/tr.json/translate?' + dataQuery,
+        rejectUnauthorized: false
     };
-    var get_req = http.request(options, function(response, error) {
+    var get_req = https.get(options, function(response, error) {
         if (error) {
             console.log(error);
-            res.status(400).end("NOPE");
+            res.status(400).end("ERROR");
         }
         else {
             response.setEncoding('utf8');
             response.on('data', function (chunk) {
-                console.log(chunk);
-                res.status(200).end(chunk);
+                var aux = JSON.parse(chunk).text;
+                res.status(200).end(JSON.stringify(aux[0]));
             });
         }
 
     });
-    get_req.write(dataQuery);
-    get_req.end();
-
+    get_req.on('error', function(e) {
+        console.log('ERROR: ' + e.message);
+    });
 });
 
 wordsRouter.post('/', function(req, res, next) {

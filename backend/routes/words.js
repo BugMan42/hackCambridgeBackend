@@ -2,6 +2,8 @@ var express = require('express');
 var wordsRouter = express.Router();
 var word = require('mongoose').model('WordEN');
 var ObjectId = require('mongoose').Types.ObjectId;
+var querystring = require('querystring');
+var http = require('http');
 
 
 
@@ -42,17 +44,48 @@ wordsRouter.post('/', function(req, res, next) {
     })
 });
 
-wordsRouter.post('/discard', function(req, res, next) {
-    var discartedWords = req.params.discartedWords;
-    console.log(discartedWords);
-    var NUMBER_OF_WORDS = discartedWords.length;
+wordsRouter.post('/discardedWords', function(req, res, next) {
+    var discardedWords = req.body;
+    console.log(discardedWords);
+    //var NUMBER_OF_WORDS = discartedWords.length;
     var dataQuery = querystring.stringify({
-        words: discartedWords,
-        nWords: NUMBER_OF_WORDS
+        words: discardedWords,
+        nWords: 1
     });
     var options = {
         host: '172.20.1.43',
         path: '/discardedWords',
+        port: '5000',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Length': Buffer.byteLength(dataQuery)
+        }
+    };
+    var post_req = http.request(options, function(response, error) {
+        if (error) console.log(error);
+        response.setEncoding('utf8');
+        response.on('data', function (chunk) {
+            console.log(chunk);
+            res.status(200).end("nice");
+        });
+
+    });
+    post_req.write(dataQuery);
+    post_req.end();
+});
+
+wordsRouter.post('/acceptedWords', function(req, res, next) {
+    var acceptedWords = req.body;
+    console.log(acceptedWords);
+    //var NUMBER_OF_WORDS = discartedWords.length;
+    var dataQuery = querystring.stringify({
+        words: acceptedWords,
+        nWords: 1
+    });
+    var options = {
+        host: '172.20.1.43',
+        path: '/acceptedWords',
         port: '5000',
         method: 'POST',
         headers: {

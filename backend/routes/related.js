@@ -58,7 +58,7 @@ router.get('/', function(req, res, next){
     });
 });
 
-router.get('/singleWord', function(req, res, next){
+router.post('/singleWord', function(req, res, next){
     word.find({}, function(err, data) {
         if(!err) {
             var randWords = req.body;
@@ -103,7 +103,7 @@ router.get('/singleWord', function(req, res, next){
     });
 });
 
-router.get('/multipleWords', function(req, res, next){
+router.post('/multipleWords', function(req, res, next){
     word.find({}, function(err, data) {
         if(!err) {
             var randwords = req.body;

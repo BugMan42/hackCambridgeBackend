@@ -50,6 +50,7 @@ wordsRouter.post('/discardedWords', function(req, res, next) {
     var dataQuery = querystring.stringify({
         words: discardedWords
     });
+    console.log(dataQuery);
     var options = {
         host: '172.20.1.43',
         path: '/discardedWords',

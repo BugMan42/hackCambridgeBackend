@@ -39,7 +39,7 @@ router.get('/', function(req, res, next){
                     var words = [];
                     for (word in chunk) {
                         words.push({
-                            'word':word,
+                            'word':chunk[word],
                             'definition':''
                         })
                     }

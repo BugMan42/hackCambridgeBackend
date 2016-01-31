@@ -36,10 +36,11 @@ router.get('/', function(req, res, next){
                 response.setEncoding('utf8');
                 response.on('data', function (chunk) {
                     console.log(chunk);
+                    var jsonChunk = JSON.stringify(chunk);
                     var words = [];
-                    for (word in chunk) {
+                    for (word in jsonChunk) {
                         words.push({
-                            'word':chunk[word],
+                            'word':jsonChunk[word],
                             'definition':''
                         })
                     }

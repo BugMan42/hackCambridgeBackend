@@ -38,7 +38,7 @@ userRouter.delete('/:id', function(req, res, next) {
         else {
             if(user) {
                 user.remove();
-                res.status(204).end();
+                res.status(200).end("User Deleted");
             } else {
                 res.status(404).end();
             }

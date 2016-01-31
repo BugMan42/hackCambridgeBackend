@@ -15,6 +15,7 @@ router.get('/', function(req, res, next){
     word.find({}, function(err, data) {
         if(!err) {
             var randWord = data[Math.floor(Math.random() * data.length)].word;
+            console.log(randWord);
             var NUMBER_OF_WORDS = 50;
             var dataQuery = querystring.stringify({
                 word: randWord,
@@ -22,7 +23,7 @@ router.get('/', function(req, res, next){
             });
             var options = {
                 host: '172.20.1.43',
-                path: '/',
+                path: '/relatedWords',
                 port: '5000',
                 method: 'POST',
                 headers: {
@@ -35,7 +36,61 @@ router.get('/', function(req, res, next){
                 response.setEncoding('utf8');
                 response.on('data', function (chunk) {
                     console.log(chunk);
-                    res.status(200).end(chunk);
+                    var jsonChunk = JSON.parse(chunk);
+                    var words = [];
+                    for (var i = 0; i < jsonChunk.length; ++i) {
+                        words.push({
+                            'word':jsonChunk[i],
+                            'definition':''
+                        })
+                    }
+                    res.status(200).json(words);
+                });
+
+            });
+            post_req.write(dataQuery);
+            post_req.end();
+        }
+        else {
+            res.status(404).end("Not Found");
+        }
+    });
+});
+
+router.post('/multipleWords', function(req, res, next){
+    word.find({}, function(err, data) {
+        if(!err) {
+            var randWords = req.body;
+            console.log("MULTIPLE WORDS " + randWords);
+            var dataQuery = JSON.stringify({
+                words: randWords,
+                nWords: 2
+            });
+            //console.log(dataQuery);
+            var options = {
+                host: '172.20.1.43',
+                path: '/filterListOfWords',
+                port: '5000',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Content-Length': Buffer.byteLength(dataQuery)
+                }
+            };
+            var post_req = http.request(options, function(response, error) {
+                if (error) console.log(error);
+                response.setEncoding('utf8');
+                response.on('data', function (chunk) {
+                    console.log(chunk);
+                    var jsonChunk = JSON.parse(chunk);
+                    var words = [];
+                    for (var i = 0; i < jsonChunk.length; ++i) {
+                        words.push({
+                            'word':jsonChunk[i],
+                            'definition':''
+                        })
+                    }
+                    res.status(200).json(words);
                 });
 
             });
@@ -49,6 +104,8 @@ router.get('/', function(req, res, next){
     });
 });
 
+
+// for debugging purposes
 router.get('/all', function(req, res, next) {
     var data = [
         {
